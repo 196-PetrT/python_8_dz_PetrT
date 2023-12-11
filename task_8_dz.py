@@ -6,16 +6,14 @@
 # 2. Программа должна сохранять данные в # текстовом файле
 # 3. Пользователь может ввести одну из # характеристик для поиска определенной
 # записи(Например имя или фамилию человека)
-# 4. Использование функций. Ваша программа # не должна быть линейной
+# 4. Использование функций. Ваша программа не должна быть линейной
 
+# Дополнить справочник возможностью копирования данных из одного файла в другой. Пользователь вводит номер строки,
+# которую необходимо перенести из одного файла в другой.
 
 from os.path import exists
 from csv import DictReader, DictWriter
 
-
-# class LenNumberError(Exception):
-#     def __init__(self, txt):
-#         self.txt = txt
 
 def get_info():
     first_name = "Иван"
@@ -49,9 +47,18 @@ def write_file(file_name, lst):
         f_writer.writeheader()
         f_writer.writerows(res)
 
+
 file_name = 'phone.csv'
+file_2 = 'phone2.csv'
+
 
 def main():
+    info = ["Доступные команды: ",
+            "q - завершение программы",
+            "r - чтение исходного файла",
+            "w - добавление новой записи в исходный файл",
+            "c - копирование требуемой записи в отдельный файл"]
+    print('\n'.join(' '.join(sl) for sl in info))
     while True:
         command = input("Введите команду: ")
         if command == 'q':
@@ -65,10 +72,15 @@ def main():
                 print("файл отсутствует, создайте его!")
                 continue
             print(read_file(file_name))
+        elif command == 'c':
+            if not exists(file_2):
+                print("файл отсутствует, создаем его!")
+                create_file(file_2)
+                continue
+            inf = read_file(file_name)
+            n = int(input(f'В файле {len(inf)} строк(-а,-и), введите номер копируемой записи: '))
+            buf = [*inf[n - 1].values()]
+            write_file(file_2, buf)
+
 
 main()
-
-
-
-
-
